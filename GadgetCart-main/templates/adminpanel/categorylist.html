@@ -1,0 +1,68 @@
+{% extends 'adminpanel/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<!-- Start Content-->
+
+<div class="container-fluid ">
+    <h4 class="mt-5 ml-3">CATEGORY LIST</h4>
+
+</div>
+
+{% include 'adminpanel/includes/alerts.html' %}
+
+
+<div class="row">
+    {% for category in categories %}
+    <div class="card ml-5 mt-4" style="width: 18rem;">
+        <img class="card-img-top" src="{{ category.cat_image.url }}" alt="Card image cap">
+        <div class="card-body">
+            <h4 class="card-title">
+                <center>{{ category.category_name }} </center>
+            </h4>
+            <div class="d-flex justify-content-center">
+                <div class="mr-2">
+                    <a href="{% url 'categoryedit' category.id %}">
+                        <span class="btn btn-secondary material-icons">edit</span>
+                    </a>
+                </div>
+                <div>
+                    <a type="button" href="{% url 'categorydelete' category.id %}" onclick="deleteItems(event)" data-dismiss="alert">
+                        <span class="btn btn-secondary material-icons">delete</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+      </div>
+      {% endfor %}
+</div>
+
+
+
+
+<!-- Footer Start -->
+<footer class="footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
+            </div>
+            <div class="col-md-6">
+                <div class="text-md-end footer-links d-none d-md-block">
+                    <a href="javascript: void(0);">About</a>
+                    <a href="javascript: void(0);">Support</a>
+                    <a href="javascript: void(0);">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- end Footer -->
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'user/base.html' %}
+
+{% load humanize %}
+
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+    <div class="container">
+        <div class="row">
+        {% include 'user/includes/dashboard_sidebar.html' %}
+        <main class="col-md-9">
+            <article class="card shadow p-3 bg-white rounded">
+            <header class="card-header">
+                <strong class="d-inline-block mr-3">Your Order History</strong>
+              
+            </header>
+            <div class="card-body col-12">
+                <div class="row"> 
+                    
+                    <div class="col-md-12">
+                        <table class="table table-hover table-responsive" id="">
+                            <thead>
+                              <tr>
+                                <th scope="col">Orderd Product</th>
+                                <th scope="col">Order Number</th>
+                                
+                                <th scope="col">Product name</th>
+                                <th scope="col">Billing Name</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Order Date</th>
+                                <th scope="col">Order Status</th>
+                                <th scope="col">Cancel Order</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                              <tr class="text-center">
+                                <th><a href="{{ order.product.get_url }}"><img src="{{order.product.image1.url}}" class="img-sm" alt=""></a></th>
+                                <th class="align-middle"><a href="{% url 'order_detail' order.order.order_number %}">{{order.order.order_number}}</a></th>
+                               
+                                <td class="align-middle">{{order.product}}</td>
+                                <th class="align-middle">{{order.order.full_name}}</th>
+                                <td class="align-middle">{{order.quantity}}</td>
+                                <td class="align-middle">{{order.created_at | naturaltime}}</td>
+                                <td class="align-middle">{{order.status}}</td>
+                                <td class="align-middle">
+                                  {% if order.status == 'Canceled'  %}
+                                  <p>Order Canceled</p>
+                                  {% elif order.status == 'Delivered' %}
+                                   <p>Order Delivered</p>
+                                   {% else %}
+                                   <a class="btn btn-danger text-white" href="{% url 'cancel_order' order.id %}" onclick="deleteItems(event)">Cancel</a>
+                                   
+                                  {% endif %}
+                                </td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        
+                    </div>
+                    
+                
+                </div> <!-- row.// -->
+            </div> <!-- card-body .// -->
+           
+            </article> <!-- order-group.// --> 
+        </main>
+    </div> <!-- row.// -->
+    </div>
+    
+    
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+<!-- DataTable -->
+<link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script>
+  $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
+{% endblock %}

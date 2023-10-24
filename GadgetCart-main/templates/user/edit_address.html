@@ -1,0 +1,170 @@
+{% extends 'user/base.html' %}
+
+{% load crispy_forms_filters %}
+
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+  {% include 'user/includes/alerts.html' %}
+
+        <div class="row">
+        <main class="container col-md-6">
+           
+            <article class="card shadow p-3 bg-white rounded mt-2">
+           
+       
+            <header class="card-header">
+                <strong class="d-inline-block mr-3">Edit Address</strong>
+              
+            </header>
+            <div class="card-body">
+              
+                <div class="row"> 
+                    
+                    <div class="col-md-12">
+                      <form action="" method="post" id="editaddressform">
+                        {% csrf_token %}
+                        
+                        
+                        <div class="form-row">
+                            <div class="col form-group">
+                              
+                              <div class="form-group">
+                                {{form.first_name  | as_crispy_field}}
+                              </div>
+                            </div>
+                            <div class="col form-group">
+                              <div class="form-group">
+                                {{form.last_name  | as_crispy_field}}
+                              </div>
+                            </div>
+                          </div>
+            
+                          <div class="form-row">
+                            <div class="col form-group">
+                             
+                              <div class="form-group">
+                                {{form.email  | as_crispy_field}}
+                              </div>
+                            </div>
+                            <div class="col form-group">
+                            
+                              <div class="form-group">
+                                {{form.phone_number  | as_crispy_field}}
+                              </div>
+                            </div>
+                          </div>
+            
+                          <div class="form-row">
+                            <div class="col form-group">
+                            
+                              <div class="form-group">
+                                {{form.address_line  | as_crispy_field}}
+                              </div>
+                            </div>
+                            <div class="col form-group">
+                             
+                              <div class="form-group">
+                                {{form.house_no  | as_crispy_field}}
+                              </div>
+                            </div>
+                          </div>
+            
+            
+                          <div class="form-row">
+                            <div class="col form-group">
+                                
+                                <div class="form-group">
+                                    {{form.pin  | as_crispy_field}}
+                                  </div>
+                              </div>
+                            <div class="col form-group">
+                             
+                              <div class="form-group">
+                                {{form.city  | as_crispy_field}}
+                              </div>
+                            </div>
+                            
+                            <div class="col form-group">
+                            
+                              <div class="form-group">
+                                {{form.state  | as_crispy_field}}
+                              </div>
+                            </div>
+                          
+                          </div>
+
+                          <div class="form-row">
+                            <div class="col form-group">
+                            
+                              <div class="form-group">
+                                {{form.country  | as_crispy_field}}
+                              </div>
+                            </div>
+                            <div class="col form-group">
+                             
+                              <div class="form-group">
+                                {{form.type | as_crispy_field}}
+                              </div>
+                            </div>
+                          </div>
+                         
+                   
+                        
+                          <input type="submit" value="Update Address" class="btn btn-primary" style="color: white;">
+                      </form>
+                       
+                    </div>
+                    
+                
+                </div> <!-- row.// -->
+            </div> <!-- card-body .// -->
+           
+            </article> <!-- order-group.// --> 
+        </main>
+    </div> <!-- row.// -->
+
+    
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+    <script>
+      $(document).ready(function () {
+          $("#editaddressform").validate({
+              rules: {
+                    address_line: {
+                        required: true,   
+                    },
+                    city: {
+                      required: true,
+                    },
+                    state: {
+                      required: true,
+                    
+                    },
+                    country: {
+                      required: true, 
+                    },
+                    phone_number: {
+                      required: true, 
+                      digits:true,
+                    },
+                    pin: {
+                      required: true, 
+                      digits:true,
+                      maxlength: 6,
+                      minlength: 6,
+                    },
+                 
+                }  
+          })
+      })
+  
+  </script>
+
+{% endblock %}
+
+
+

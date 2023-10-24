@@ -1,0 +1,162 @@
+{% load static %}
+
+<body>
+  <!-- Navbar -->
+<nav class="navbar navbar-expand-md navbar-light border-bottom">
+
+  <a class="navbar-brand p-4" href="{% url 'homepage' %}">
+   <h3>Gadgetcart</h3>
+  </a>
+
+  <!-- Collapse button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav13"
+    aria-controls="basicExampleNav13" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Breadcrumbs -->
+  <ol class="breadcrumb d-xl-flex">
+    <li class="nav-item active">
+      <a class="nav-link" href="{% url 'homepage' %}">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'store' %}">Store</a>
+      </li>
+   
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        All Category
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="{% url 'store' %}">All Products</a>
+        {% for category in links %}
+        <a class="dropdown-item" href="{{ category.get_url }}">{{ category.category_name }}</a>
+        {% endfor %}
+        
+      </div>
+
+    </li>
+    <li class="nav-item active">
+      {% if request.user.is_authenticated %}
+      <a class="nav-link" href="">Welcome {{ request.user.first_name }}.</a>
+      {% else %}
+      <a class="nav-link" href="">Welcome Guest!</a>
+      {% endif %}
+    </li>
+   
+ 
+
+  </ol>
+  <!-- Breadcrumbs -->
+
+  <!-- Links -->
+  <div class="collapse navbar-collapse" id="basicExampleNav13">
+
+    <form class="navbar-search pl-0 ml-auto mt-3 mb-2 mt-md-0 mb-md-0 mr-4" action="{% url 'search' %}" class="search" method="get">
+      <div class="input-group d-block d-md-flex mb-0 mt-1">
+        <div class="input-group-prepend border border-info">
+          <button class="bg-white border-white btn input-icon d-flex align-items-center" type="submit"> <i class="fas fa fa-search mx-3"></i></button>
+          <input class="form-control white-text rgba-black-light border-0 z-depth-0 pl-5" action="{% url 'search' %}" type="text"
+            placeholder="Search" aria-label="Search" name="keyword">
+        </div>
+      </div>
+    </form>
+
+
+    <!-- Right -->
+    <ul class="navbar-nav">
+      <div class="row">
+      
+     
+      {% if user.id is None %}
+     
+      <li class="nav-item nav1 pl-2 mt-1 mb-md-0 d-md-none d-xl-inline-block">
+        <a href="{% url 'signin' %}" type="button"
+          class="p-2 ml-1">Signin</a>
+      </li>
+      <li class="nav-item mt-1 mb-md-0 mr-2 d-md-none d-xl-inline-block">
+        <a href="{% url 'register' %}" type="button"
+          class="p-2">Signup</a>
+      </li>
+      {% else %}
+     
+      <li class="nav-item nav2 pl-2 mt-1 mb-md-0 d-md-none d-xl-inline-block">
+        <a href="{% url 'dashboard' %}" type="button"
+          class="p-2 ml-1">Dashboard</a>
+      </li>
+      <li class="nav-item mt-1 mb-md-0 mr-2 d-md-none d-xl-inline-block">
+        <a href="{% url 'signout' %}" type="button"
+          class="p-2">Signout</a>
+      </li>
+      {% endif %}
+    
+      <div class="ml-auto carticon mr-4">
+        <li class="nav-item px-3 text-uppercase mb-0 position-relative d-lg-flex mt-2">
+
+          <a href="{% url 'cart' %}" class="cart position-relative d-inline-flex" aria-label="View your shopping cart">
+            <i class="fas fa fa-shopping-cart fa-2x"></i>
+            <span class="cart-basket d-flex align-items-center justify-content-center">
+              {{ cart_count }}
+            </span>
+          </a>
+        </li>
+      </div>
+
+      </div>
+    </ul>
+     
+
+  </div>
+  <!-- Links -->
+
+</nav>
+<!-- Navbar -->
+
+</body>
+
+<style>
+  ul li a.cart:hover {
+    text-decoration: none;
+    color: #d60e96;
+  }
+  
+  ul li a.cart .cart-basket {
+    font-size: .6rem;
+    position: absolute;
+    top: -6px;
+    right: -5px;
+    width: 18px;
+    height: 18px;
+    color: rgb(255, 255, 255);
+    background-color: #418deb;
+    border-radius: 50%;
+  }
+  .fa-shopping-cart{
+    color: #113951;
+  }
+
+  .fa-shopping-cart:hover{
+    color: #4ea3b8;
+  }
+
+</style>
+
+<style>
+  @media only screen and (max-width: 600px) {
+    .navbar-brand{
+      margin-top: 5px !important;
+      margin-left: 20px !important;
+    }
+    .navbar-toggler{
+      margin-right: 45px !important;
+    }
+    .breadcrumb{
+      justify-content: center;
+      margin-top: -10px;
+    }
+   
+    .carticon{
+      margin-right: 15px;
+    }
+  }
+</style>

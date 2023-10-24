@@ -1,0 +1,258 @@
+{% extends 'adminpanel/base.html' %}
+{% load humanize %}
+{% block content %}
+
+         <!-- start page title -->
+         <div class="row">
+            <div class="col-12">
+                <div class="page-title-box ml-4">
+                    
+                    <h4 class="page-title">DASHBOARD.</h4>
+                </div>
+            </div>
+        </div>     
+        <!-- end page title --> 
+
+
+    <div class="bg-primary pt-10 pb-21"></div>
+    <div class="container-fluid mt-n22 px-6">
+        <div class="row">
+            <div class="col-xl-3 col-lg-6 col-md-12 col-12">
+                <!-- card -->
+                <div class="card rounded-3">
+                    <!-- card body -->
+                    <div class="card-body">
+                        <!-- heading -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h4 class="mb-0">Total Orders</h4>
+                            </div>
+                        </div>
+                        <!-- project number -->
+                        <div>
+                            <h2 class="fw-bold">{{total_orders | intcomma }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-6 col-md-12 col-12">
+                <!-- card -->
+                <div class="card rounded-3">
+                    <!-- card body -->
+                    <div class="card-body">
+                        <!-- heading -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h4 class="mb-0">Total Users</h4>
+                                
+                            </div>
+                        </div>
+                        <!-- project number -->
+                        <div>
+                            <h2 class="fw-bold">{{users}}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-6 col-md-12 col-12">
+                <!-- card -->
+                <div class="card rounded-3">
+                    <!-- card body -->
+                    <div class="card-body">
+                        <!-- heading -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h4 class="mb-0">Total Revenue</h4>
+                            </div>
+                        </div>
+                        <!-- project number -->
+                        <div>
+                            <h2 class="fw-bold">₹{{ total_revenue | floatformat:"0" | intcomma }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-6 col-md-12 col-12">
+                <!-- card -->
+                <div class="card rounded-3">
+                    <!-- card body -->
+                    <div class="card-body">
+                        <!-- heading -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h4 class="mb-0">Total Products</h4>
+                            </div>
+                        </div>
+                        <!-- project number -->
+                        <div>
+                            <h2 class="fw-bold">{{products}}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        
+        <div class="row mt-7 d-flex justify-content-evenly">
+            <div class="col-12 col-lg-5 card">
+                <canvas id="statusChart" width="300" height="300"></canvas>
+            </div>
+            <div class="col-12 col-lg-5 card ">
+                <canvas id="transaction" width="300" height="300"></canvas>
+            </div>
+            <div class="col-12 col-lg-5 card mt-5">
+                <canvas id="chart3" width="300" height="300"></canvas>
+            </div>
+            <div class="col-12 col-lg-5 card mt-5">
+                <canvas id="leading-brands" width="300" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+    
+
+
+
+<script>
+    // chart-1 Order status
+    const ctx = document.getElementById('statusChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['New Order', 'Order Accepted', 'Shipped', 'Out For Delivery', 'Delivered', 'Cancelled order'],
+            datasets: [{
+                label: 'Order Status',
+                data: {{ status_counter }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(153, 102, 255, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    
+    // chart-2 Payments methods
+    const transactionData = {
+        labels: [
+            
+            {% for i in brands_list %}
+            '{{ i }}',
+            {% endfor %}
+        ],
+        datasets: [{
+            label: 'Brands',
+            data: {{ products_count }},
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)'
+            ],
+            hoverOffset: 4
+        }]
+    };
+    const transaction = document.getElementById('transaction').getContext('2d');
+    const myTransactionChart = new Chart(transaction, {
+        type: 'doughnut',
+        data: transactionData,
+    })
+
+ // chart-3 Weekly orders
+ const ctx3 = document.getElementById('chart3').getContext('2d');
+ const chart3 = new Chart(ctx3, {
+     type: 'line',
+     data: {
+         labels: {{last_week_days|safe}},
+         datasets: [{
+             label: 'Orders',
+             data: {{ last_week_orders|safe }},
+             borderWidth: 1,
+             borderColor: 'rgb(75, 192, 192)',
+             tension: 0.1,
+             fill: false,
+         }]
+     },
+     options: {
+         scales: {
+             y: {
+                 beginAtZero: true
+             }
+         }
+     }
+ });
+
+  //cahrt-4 Brands
+  const leadingBrandsLabel = [
+        'Paypal',
+        'Cash on Delivary',
+        'Razorpay'
+];
+const leadingBrandsData = {
+  labels: leadingBrandsLabel,
+  datasets: [{
+      label: 'Payment Methods',
+      data:  {{ payment_method_status }} ,
+      backgroundColor: [
+          'rgba(255, 99, 132, 0.7)',
+          'rgba(255, 159, 64, 0.7)',
+          'rgba(255, 205, 86, 0.7)',
+          'rgba(75, 192, 192, 0.7)',
+          'rgba(54, 162, 235, 0.7)',
+          'rgba(153, 102, 255, 0.7)',
+          'rgba(201, 203, 207, 0.7)'
+      ],
+      borderColor: [
+          'rgb(255, 99, 132)',
+          'rgb(255, 159, 64)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(54, 162, 235)',
+          'rgb(153, 102, 255)',
+          'rgb(201, 203, 207)'
+      ],
+      borderWidth: 1
+  }]
+};
+const leadingBrand = document.getElementById('leading-brands').getContext('2d');
+const leadingBrandChart = new Chart(leadingBrand, {
+  type: 'bar',
+  data: leadingBrandsData,
+  options: {
+      scales: {
+          y: {
+              beginAtZero: true,
+          },
+      }
+  },
+})
+
+
+</script>
+
+
+{% endblock %}
